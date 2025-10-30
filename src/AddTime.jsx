@@ -5,7 +5,7 @@ const headers = {
     "ngrok-skip-browser-warning": "123"
 }
 
-function AddTime() {
+function AddTime({onNewTime}) {
     const [nome,setNome] = useState('');
 
     const handleSubmit = async (e) => {
@@ -19,7 +19,10 @@ function AddTime() {
             headers:headers
         })
         .then(function(response) {
-            console.log(response);
+            console.log('time adicionado com sucesso...');
+            console.log(response.data);
+            setNome('');
+            onNewTime(response.data);
         })
         .catch(function(error) {
             console.log(error);
