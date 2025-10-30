@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import AddTime from './AddTime';
+import EditTime from './EditTime';
 
 const headers = {
     "ngrok-skip-browser-warning": "123"
@@ -9,6 +10,7 @@ const headers = {
 function TimesList() {
 
     const [times,setTimes] = useState([]);
+    const [timeEmEdicao,setTimeEmEdicao] = useState(null);
 
     useEffect(() => {
         fetchTimes();
@@ -47,9 +49,22 @@ function TimesList() {
         });
     };
 
+    const handleEdit = async (time) => {
+        setTimeEmEdicao(time);
+    }
+
+    const handleEditTime = (timeEmEdicao) => {
+        setTimes(
+            times.map((t) =>
+                (t.id === timeEmEdicao.id ? timeEmEdicao : t)
+            )
+        )
+    }
+
     return (<>
         <h1>Lista de times de futebol</h1>
         <AddTime onNewTime={handleNewTime} />
+        <EditTime time={timeEmEdicao} onTimeEdit={handleEditTime}/>
         <table>
             <thead>
                 <tr>
@@ -63,7 +78,10 @@ function TimesList() {
                     <tr>
                         <td>{t.id}</td>
                         <td>{t.nome}</td>
-                        <td><button onClick={() => handleDelete(t.id)}>Excluir</button></td>
+                        <td>
+                            <button onClick={() => handleEdit(t)}>Editar</button> |
+                            <button onClick={() => handleDelete(t.id)}>Excluir</button>
+                        </td>
                     </tr>
                 ))}
             </tbody>
